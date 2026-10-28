@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntax Santos | Full-Stack & Discord Developer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        petal: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            300: '#f472b6',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#701a75',
+                            900: '#4a044e',
+                            950: '#1e0220',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styling for App-Launcher / Petal Client Vibe */
+        body {
+            background: radial-gradient(circle at top center, #2e082d 0%, #170319 50%, #0a010c 100%);
+            background-attachment: fixed;
+            color: #f3e8f4;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-panel {
+            background: rgba(35, 10, 36, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 114, 182, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel-interactive {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-panel-interactive:hover {
+            border-color: rgba(244, 114, 182, 0.45);
+            box-shadow: 0 0 25px rgba(217, 70, 239, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 2, 17, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(217, 70, 239, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(217, 70, 239, 0.6);
+        }
+
+        /* Glowing Accent Text & Borders */
+        .glow-text {
+            text-shadow: 0 0 12px rgba(244, 114, 182, 0.5);
+        }
+        .glow-box {
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
+        }
+
+        /* Scanline Overlay Effect for Console */
+        .scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+        }
+
+        /* Toast notification animation */
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .toast-animate {
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-petal-500 selection:text-white pb-12">
+
+    <!-- PRELOADER / LOADING SCREEN -->
+    <div id="preloader" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0d010e] transition-opacity duration-700">
+        <!-- Background Ambient Glow -->
+        <div class="absolute w-[350px] h-[350px] bg-petal-600/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col items-center text-center px-4 max-w-sm">
+            <!-- Animated SVG Logo -->
+            <div class="mb-6 relative group">
+                <div class="absolute -inset-2 bg-gradient-to-r from-petal-500 to-fuchsia-600 rounded-3xl blur-xl opacity-40 animate-pulse"></div>
+                <div class="relative w-28 h-28 glass-panel rounded-3xl flex items-center justify-center border border-petal-400/40 p-3 shadow-2xl">
+                    <svg viewBox="0 0 200 120" class="w-full h-full text-petal-300 drop-shadow-[0_0_12px_rgba(244,114,182,0.6)]">
+                        <path d="M 65 25 L 25 60 L 65 95" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+                        <text x="100" y="82" font-family="Inter, sans-serif" font-weight="800" font-size="70" fill="currentColor" text-anchor="middle">S</text>
+                        <path d="M 135 25 L 175 60 L 135 95" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-2xl font-extrabold text-white tracking-wide mb-1">
+                SYNTAX <span class="text-transparent bg-clip-text bg-gradient-to-r from-petal-300 to-fuchsia-400">SANTOS</span>
+            </h1>
+            <p id="loader-status" class="text-xs font-mono text-zinc-400 mb-6 h-4">Initializing framework...</p>
+
+            <!-- Loading Bar Track -->
+            <div class="w-full h-1.5 bg-petal-950/80 border border-white/10 rounded-full overflow-hidden p-0.5 shadow-inner">
+                <div id="loader-bar" class="h-full bg-gradient-to-r from-petal-500 via-fuchsia-500 to-petal-300 rounded-full w-0 transition-all duration-200 ease-out shadow-[0_0_10px_rgba(217,70,239,0.8)]"></div>
+            </div>
+
+            <span id="loader-percentage" class="text-[10px] font-mono text-petal-400 mt-2 font-semibold">0%</span>
+        </div>
+    </div>
+
+    <!-- Ambient Glowing Background Bubbles -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-petal-600/15 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-10 -left-20 w-[400px] h-[400px] bg-petal-800/20 blur-[100px] rounded-full"></div>
+        <div class="absolute top-1/3 -right-20 w-[450px] h-[450px] bg-fuchsia-900/20 blur-[120px] rounded-full"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-6">
+
+        <!-- Top Navigation Bar / App Header -->
+        <header class="glass-panel rounded-2xl p-3 mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <!-- Status Dot Indicator -->
+                <div class="flex items-center space-x-2 bg-petal-950/60 px-3 py-1.5 rounded-xl border border-petal-500/20">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-xs font-mono tracking-wider uppercase text-petal-300">ONLINE</span>
+                </div>
+                <div class="h-4 w-[1px] bg-white/10 hidden sm:block"></div>
+                <!-- Dev Tag -->
+                <span class="text-xs font-mono text-zinc-400 hidden sm:inline-block">v2.4.0-stable</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex items-center space-x-1 sm:space-x-2 text-sm font-medium">
+                <a href="#about" class="px-3.5 py-1.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-all">About</a>
+                <a href="#projects" class="px-3.5 py-1.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-all">Projects</a>
+                <a href="#terminal" class="px-3.5 py-1.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-all">Terminal</a>
+                <a href="#links" class="px-3.5 py-1.5 rounded-xl bg-petal-600/30 text-petal-200 border border-petal-500/30 hover:bg-petal-600/50 transition-all">Connect</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section / Profile Card -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-10 mb-8 relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 text-[180px] font-black text-white/[0.02] select-none pointer-events-none font-mono">
+                &lt;S&gt;
+            </div>
+
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                <div class="space-y-4 max-w-2xl">
+                    <!-- Badges Row -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Embedded Logo Icon in Badge -->
+                        <div class="w-7 h-7 glass-panel rounded-lg flex items-center justify-center p-1 border border-petal-400/30">
+                            <svg viewBox="0 0 200 120" class="w-full h-full text-petal-300">
+                                <path d="M 65 25 L 25 60 L 65 95" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+                                <text x="100" y="82" font-family="Inter, sans-serif" font-weight="800" font-size="70" fill="currentColor" text-anchor="middle">S</text>
+                                <path d="M 135 25 L 175 60 L 135 95" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span class="glass-pill px-3 py-1 rounded-lg text-xs font-mono text-petal-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-petal-400"></i> Verified Dev
+                        </span>
+                        <span class="glass-pill px-3 py-1 rounded-lg text-xs font-mono text-zinc-300">
+                            Full-Stack &amp; Discord Specialist
+                        </span>
+                    </div>
+
+                    <!-- Main Name Heading -->
+                    <div>
+                        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-2">
+                            Syntax <span class="text-transparent bg-clip-text bg-gradient-to-r from-petal-300 via-petal-400 to-fuchsia-500 glow-text">Santos</span>
+                        </h1>
+                        <p class="text-lg text-zinc-300 font-light leading-relaxed">
+                            Crafting high-performance web applications, custom Discord bots, and advanced Minecraft server architectures.
+                        </p>
+                    </div>
+
+                    <!-- Quick Stats Pill Bar -->
+                    <div class="grid grid-cols-3 gap-3 pt-2 max-w-md">
+                        <div class="bg-petal-950/40 p-3 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-zinc-400 font-mono">Specialty</div>
+                            <div class="text-sm font-semibold text-petal-300">Discord API</div>
+                        </div>
+                        <div class="bg-petal-950/40 p-3 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-zinc-400 font-mono">Stack</div>
+                            <div class="text-sm font-semibold text-petal-300">JS / Java / Py</div>
+                        </div>
+                        <div class="bg-petal-950/40 p-3 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-zinc-400 font-mono">Status</div>
+                            <div class="text-sm font-semibold text-emerald-400">Available</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button Block -->
+                <div class="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto">
+                    <a href="https://discord.com/users/1223298124097916983" target="_blank" rel="noopener" 
+                       class="flex items-center justify-center gap-3 bg-gradient-to-r from-petal-600 to-fuchsia-600 hover:from-petal-500 hover:to-fuchsia-500 text-white font-semibold px-6 py-3.5 rounded-2xl shadow-lg shadow-petal-900/50 transition-all group">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                        <span>Discord Profile</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                    </a>
+
+                    <a href="https://discord.gg/953SVBb9j" target="_blank" rel="noopener" 
+                       class="flex items-center justify-center gap-3 glass-pill hover:bg-white/10 text-white font-medium px-6 py-3.5 rounded-2xl transition-all border border-petal-400/20 group">
+                        <i class="fa-solid fa-server text-petal-300"></i>
+                        <span>Join Community</span>
+                    </a>
+
+                    <button onclick="copyDiscordID('1223298124097916983')" 
+                            class="flex items-center justify-center gap-2 text-xs font-mono text-zinc-400 hover:text-petal-300 py-2 transition-colors">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copy User ID</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- About & Tech Stack Grid -->
+        <section id="about" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- About Me Box -->
+            <div class="md:col-span-2 glass-panel rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-4 text-petal-400 font-mono text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-code-terminal"></i> Overview
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-3">Developer &amp; Systems Creator</h2>
+                    <p class="text-zinc-300 leading-relaxed text-sm mb-4">
+                        Hello! I'm <strong class="text-white">Syntax Santos</strong>. I build sleek modern web sites, robust backend services, Discord tools, and Minecraft Java plugins. My focus is delivering intuitive interfaces paired with efficient, clean code.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed text-sm">
+                        Whether you need a custom Discord bot integration, interactive web dashboard, or server backend tools, I bring full-stack capabilities with an emphasis on performance and visual presentation.
+                    </p>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-white/5 flex flex-wrap gap-4 text-xs font-mono text-zinc-400">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Web Development
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Bot Development
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i> Spigot/Paper API
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack Skills Box -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8">
+                <div class="flex items-center gap-2 mb-4 text-petal-400 font-mono text-xs uppercase tracking-wider">
+                    <i class="fa-solid fa-layer-group"></i> Technologies
+                </div>
+                <h3 class="text-xl font-bold text-white mb-4">Tech Stack</h3>
+                
+                <div class="space-y-3">
+                    <div class="bg-petal-950/40 p-3 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <span class="text-sm font-medium text-zinc-200 flex items-center gap-2">
+                            <i class="fa-brands fa-js text-yellow-400"></i> JavaScript / Node.js
+                        </span>
+                        <span class="text-xs font-mono text-petal-300 bg-petal-500/10 px-2 py-0.5 rounded">Expert</span>
+                    </div>
+
+                    <div class="bg-petal-950/40 p-3 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <span class="text-sm font-medium text-zinc-200 flex items-center gap-2">
+                            <i class="fa-brands fa-discord text-indigo-400"></i> Discord.js / API
+                        </span>
+                        <span class="text-xs font-mono text-petal-300 bg-petal-500/10 px-2 py-0.5 rounded">Expert</span>
+                    </div>
+
+                    <div class="bg-petal-950/40 p-3 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <span class="text-sm font-medium text-zinc-200 flex items-center gap-2">
+                            <i class="fa-brands fa-java text-orange-400"></i> Java (Minecraft API)
+                        </span>
+                        <span class="text-xs font-mono text-petal-300 bg-petal-500/10 px-2 py-0.5 rounded">Advanced</span>
+                    </div>
+
+                    <div class="bg-petal-950/40 p-3 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <span class="text-sm font-medium text-zinc-200 flex items-center gap-2">
+                            <i class="fa-brands fa-python text-blue-400"></i> Python / Scripts
+                        </span>
+                        <span class="text-xs font-mono text-petal-300 bg-petal-500/10 px-2 py-0.5 rounded">Intermediate</span>
+                    </div>
+
+                    <div class="bg-petal-950/40 p-3 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <span class="text-sm font-medium text-zinc-200 flex items-center gap-2">
+                            <i class="fa-brands fa-html5 text-orange-500"></i> HTML5 / Tailwind CSS
+                        </span>
+                        <span class="text-xs font-mono text-petal-300 bg-petal-500/10 px-2 py-0.5 rounded">Advanced</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Featured Projects</h2>
+                    <p class="text-xs font-mono text-zinc-400">Custom systems, platforms, and discord bots</p>
+                </div>
+                <a href="https://discord.gg/953SVBb9j" target="_blank" class="text-xs font-mono text-petal-300 hover:underline flex items-center gap-1">
+                    View All Community Hub <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Project 1 -->
+                <div class="glass-panel glass-panel-interactive rounded-3xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-10 h-10 rounded-2xl bg-petal-500/20 border border-petal-400/30 flex items-center justify-center text-petal-300">
+                                <i class="fa-brands fa-discord text-xl"></i>
+                            </div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                                Active Project
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Discord Bot Infrastructure</h3>
+                        <p class="text-xs text-zinc-300 leading-relaxed mb-4">
+                            Custom Discord bot ecosystem featuring automated moderation, ticketing systems, custom economy integration, and reaction roles.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-[11px]">
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">Discord.js</span>
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">Node.js</span>
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">SQLite</span>
+                        </div>
+                        <a href="https://discord.gg/953SVBb9j" target="_blank" class="w-full flex items-center justify-center gap-2 glass-pill hover:bg-petal-600/30 text-xs font-medium text-white py-2.5 rounded-xl border border-petal-400/20 transition-all">
+                            <span>Join Server</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-panel glass-panel-interactive rounded-3xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-10 h-10 rounded-2xl bg-petal-500/20 border border-petal-400/30 flex items-center justify-center text-petal-300">
+                                <i class="fa-solid fa-cube text-xl"></i>
+                            </div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider bg-petal-500/10 text-petal-300 border border-petal-500/20 px-2.5 py-1 rounded-full">
+                                Spigot / Paper
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Minecraft Java Plugins</h3>
+                        <p class="text-xs text-zinc-300 leading-relaxed mb-4">
+                            Custom core plugins for server management, custom mechanics, player statistics, and cross-server synchronizations.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-[11px]">
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">Java</span>
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">Paper API</span>
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">Gradle</span>
+                        </div>
+                        <a href="https://discord.gg/953SVBb9j" target="_blank" class="w-full flex items-center justify-center gap-2 glass-pill hover:bg-petal-600/30 text-xs font-medium text-white py-2.5 rounded-xl border border-petal-400/20 transition-all">
+                            <span>Request Demo</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-panel glass-panel-interactive rounded-3xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-10 h-10 rounded-2xl bg-petal-500/20 border border-petal-400/30 flex items-center justify-center text-petal-300">
+                                <i class="fa-solid fa-globe text-xl"></i>
+                            </div>
+                            <span class="text-[10px] font-mono uppercase tracking-wider bg-fuchsia-500/10 text-fuchsia-300 border border-fuchsia-500/20 px-2.5 py-1 rounded-full">
+                                Web App
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Portfolio &amp; Client Interfaces</h3>
+                        <p class="text-xs text-zinc-300 leading-relaxed mb-4">
+                            Responsive, high-aesthetic web templates and client dashboards styled with dark glassmorphic themes.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap gap-1.5 mb-4 font-mono text-[11px]">
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">HTML5/CSS3</span>
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">Tailwind</span>
+                            <span class="bg-white/5 text-zinc-300 px-2 py-0.5 rounded-md border border-white/5">JavaScript</span>
+                        </div>
+                        <a href="https://discord.com/users/1223298124097916983" target="_blank" class="w-full flex items-center justify-center gap-2 glass-pill hover:bg-petal-600/30 text-xs font-medium text-white py-2.5 rounded-xl border border-petal-400/20 transition-all">
+                            <span>Order Custom Site</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Terminal Console (Inspired by Petal Client Launcher Console) -->
+        <section id="terminal" class="glass-panel rounded-3xl p-4 sm:p-6 mb-8 font-mono relative overflow-hidden">
+            <!-- Console Top Bar -->
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10 text-xs text-zinc-400">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                    <span class="ml-2 font-semibold text-zinc-300 text-[11px]">syntax-santos@petal-client:~</span>
+                </div>
+                <div class="flex items-center gap-2 text-[10px]">
+                    <span class="bg-petal-900/60 text-petal-300 px-2 py-0.5 rounded border border-petal-500/20">LOGS ACTIVE</span>
+                    <button onclick="clearTerminal()" class="hover:text-white transition-colors" title="Clear console">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Terminal Window Logs -->
+            <div id="terminal-logs" class="h-48 overflow-y-auto space-y-1.5 text-xs text-zinc-300 scanlines pr-2">
+                <p class="text-zinc-500">$ syntax-santos --boot --verbose</p>
+                <p class="text-emerald-400">✔ renderer ready</p>
+                <p class="text-emerald-400">✔ discord-api linked</p>
+                <p class="text-emerald-400">✔ petal-core loaded</p>
+                <p class="text-zinc-400">[20:58:31] [INFO] Loading system modules... 100%</p>
+                <p class="text-petal-300">[20:58:32] [AUTH] User authenticated as: <span class="text-white font-bold">Syntax Santos</span></p>
+                <p class="text-zinc-400">[20:58:33] [STATUS] Discord Bot Service: <span class="text-emerald-400">ONLINE</span></p>
+                <p class="text-zinc-400">[20:58:33] [STATUS] Web Server Port: <span class="text-emerald-400">8080 (READY)</span></p>
+                <p class="text-zinc-500">Type <span class="text-petal-300">'help'</span> or click prompt options below to execute interactive commands.</p>
+            </div>
+
+            <!-- Command Interactive Prompt -->
+            <div class="mt-3 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2 flex-grow">
+                    <span class="text-petal-400">$</span>
+                    <input type="text" id="terminal-input" placeholder="type 'help', 'skills', 'discord', 'clear'..." 
+                           class="bg-transparent border-none text-zinc-100 placeholder-zinc-600 focus:outline-none w-full font-mono text-xs"
+                           onkeydown="handleTerminalCommand(event)">
+                </div>
+                <!-- Quick Command Buttons -->
+                <div class="flex gap-1.5 flex-wrap">
+                    <button onclick="runCommand('skills')" class="bg-white/5 hover:bg-white/10 text-zinc-300 px-2.5 py-1 rounded text-[11px] border border-white/5">skills</button>
+                    <button onclick="runCommand('discord')" class="bg-white/5 hover:bg-white/10 text-zinc-300 px-2.5 py-1 rounded text-[11px] border border-white/5">discord</button>
+                    <button onclick="runCommand('contact')" class="bg-white/5 hover:bg-white/10 text-zinc-300 px-2.5 py-1 rounded text-[11px] border border-white/5">contact</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Links & Footer -->
+        <footer id="links" class="glass-panel rounded-3xl p-6 sm:p-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1">Let's build something together</h3>
+                    <p class="text-xs text-zinc-400">Get in touch via Discord for commissions, collaborations, or custom projects.</p>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <a href="https://discord.com/users/1223298124097916983" target="_blank" title="Discord Profile"
+                       class="w-11 h-11 rounded-2xl glass-pill flex items-center justify-center text-zinc-300 hover:text-white hover:border-petal-400/50 hover:bg-petal-600/20 transition-all">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                    </a>
+                    <a href="https://discord.gg/953SVBb9j" target="_blank" title="Discord Community Server"
+                       class="w-11 h-11 rounded-2xl glass-pill flex items-center justify-center text-zinc-300 hover:text-white hover:border-petal-400/50 hover:bg-petal-600/20 transition-all">
+                        <i class="fa-solid fa-server text-lg"></i>
+                    </a>
+                    <a href="https://github.com" target="_blank" title="GitHub"
+                       class="w-11 h-11 rounded-2xl glass-pill flex items-center justify-center text-zinc-300 hover:text-white hover:border-petal-400/50 hover:bg-petal-600/20 transition-all">
+                        <i class="fa-brands fa-github text-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 font-mono gap-2">
+                <div>&copy; 2026 Syntax Santos. All rights reserved.</div>
+                <div>Designed with Petal Glass Aesthetic</div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
+        <div class="glass-panel px-5 py-2.5 rounded-2xl border border-petal-400/40 shadow-2xl flex items-center gap-3 text-xs font-mono text-white">
+            <i class="fa-solid fa-check text-emerald-400"></i>
+            <span id="toast-message">Copied to clipboard!</span>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Preloader Initialization Animation
+        window.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            const loaderBar = document.getElementById('loader-bar');
+            const loaderPercentage = document.getElementById('loader-percentage');
+            const loaderStatus = document.getElementById('loader-status');
+
+            const statuses = [
+                'Initializing framework...',
+                'Loading Discord API modules...',
+                'Connecting to Petal Client core...',
+                'Rendering UI components...',
+                'Ready!'
+            ];
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if (progress > 100) progress = 100;
+
+                loaderBar.style.width = `${progress}%`;
+                loaderPercentage.textContent = `${progress}%`;
+
+                // Update text based on progress
+                if (progress < 25) loaderStatus.textContent = statuses[0];
+                else if (progress < 50) loaderStatus.textContent = statuses[1];
+                else if (progress < 75) loaderStatus.textContent = statuses[2];
+                else if (progress < 100) loaderStatus.textContent = statuses[3];
+                else loaderStatus.textContent = statuses[4];
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        preloader.classList.add('opacity-0', 'pointer-events-none');
+                        setTimeout(() => {
+                            preloader.style.display = 'none';
+                        }, 700);
+                    }, 300);
+                }
+            }, 120);
+        });
+
+        // Copy Discord ID functionality
+        function copyDiscordID(id) {
+            const tempInput = document.createElement('input');
+            tempInput.value = id;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showToast('Discord User ID copied to clipboard!');
+        }
+
+        // Custom Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            
+            toast.classList.remove('hidden');
+            toast.classList.add('toast-animate');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('toast-animate');
+            }, 3000);
+        }
+
+        // Terminal Log Commands Logic
+        function handleTerminalCommand(e) {
+            if (e.key === 'Enter') {
+                const input = e.target.value.trim().toLowerCase();
+                if (input) {
+                    runCommand(input);
+                    e.target.value = '';
+                }
+            }
+        }
+
+        function runCommand(cmd) {
+            const logs = document.getElementById('terminal-logs');
+            const userLine = document.createElement('p');
+            userLine.className = 'text-petal-300 mt-2';
+            userLine.textContent = `$ syntax-santos > ${cmd}`;
+            logs.appendChild(userLine);
+
+            const response = document.createElement('p');
+            response.className = 'text-zinc-300';
+
+            switch (cmd) {
+                case 'help':
+                    response.innerHTML = 'Available commands: <span class="text-petal-300">skills</span>, <span class="text-petal-300">discord</span>, <span class="text-petal-300">projects</span>, <span class="text-petal-300">contact</span>, <span class="text-petal-300">clear</span>';
+                    break;
+                case 'skills':
+                    response.textContent = 'Technologies: JavaScript, Node.js, Java (Spigot/Paper API), Python, HTML5, Tailwind CSS, Discord.js';
+                    break;
+                case 'discord':
+                    response.innerHTML = 'Discord Profile ID: 1223298124097916983 | Server: https://discord.gg/953SVBb9j';
+                    break;
+                case 'projects':
+                    response.textContent = 'Active Projects: Custom Discord Infrastructure, Paper Minecraft Plugins, Glassmorphic Portfolios.';
+                    break;
+                case 'contact':
+                    response.textContent = 'Direct message via Discord Profile link to get in touch for custom commissions.';
+                    break;
+                case 'clear':
+                    logs.innerHTML = '';
+                    return;
+                default:
+                    response.className = 'text-red-400';
+                    response.textContent = `Command not recognized: '${cmd}'. Type 'help' for command list.`;
+                    break;
+            }
+
+            logs.appendChild(response);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function clearTerminal() {
+            runCommand('clear');
+        }
+    </script>
+</body>
+</html>
